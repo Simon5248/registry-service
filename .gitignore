@@ -24,3 +24,5 @@ out/
 
 ### VS Code ###
 .vscode/
+run.bat
+config/application.properties
