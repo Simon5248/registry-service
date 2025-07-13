@@ -1,0 +1,65 @@
+server:
+  port: 8761
+  ssl:
+    enabled: true
+    key-store: ${SSL_KEYSTORE_PATH}
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: eureka-server
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOSTNAME:prod-eureka-1}
+    prefer-ip-address: true
+    secure-port: ${server.port}
+    secure-port-enabled: true
+    non-secure-port-enabled: false
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+  client:
+    registerWithEureka: ${EUREKA_REGISTER_WITH_EUREKA:true}  # 生產環境啟用註冊以支持高可用
+    fetchRegistry: ${EUREKA_FETCH_REGISTRY:true}  # 生產環境啟用獲取註冊信息以支持高可用
+    serviceUrl:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:https://prod-eureka-2:8761/eureka/}
+  server:
+    enable-self-preservation: true
+    renewal-percent-threshold: 0.85
+    eviction-interval-timer-in-ms: 60000
+    response-cache-update-interval-ms: 5000
+    wait-time-in-ms-when-sync-empty: 5
+    peer-node-read-timeout-ms: 5000
+
+# 生產環境安全配置
+spring:
+  security:
+    user:
+      name: ${EUREKA_USERNAME}
+      password: ${EUREKA_PASSWORD}
+
+# 生產環境日誌配置
+logging:
+  level:
+    root: WARN
+    '[com.example.registry]': WARN
+    '[org.springframework.cloud.netflix.eureka]': WARN
+    '[org.springframework.boot.actuate]': WARN
+  file:
+    name: /var/log/registry-service/registry.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+      
+# 監控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+    metrics:
+      enabled: true

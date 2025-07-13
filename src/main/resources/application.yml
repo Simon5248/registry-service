@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  application:
+    name: registry-service
+  security:
+    user:
+      name: ${EUREKA_USERNAME:admin}
+      password: ${EUREKA_PASSWORD:admin}
+
+# Eureka 基本配置
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    enable-self-preservation: false
+    renewal-percent-threshold: 0.85
+
+# Actuator 基本配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+      roles: ACTUATOR_ADMIN
+
+# 基本日誌配置
+logging:
+  level:
+    root: WARN
+    '[org.springframework.cloud.netflix.eureka]': INFO
+    '[com.netflix.discovery]': INFO

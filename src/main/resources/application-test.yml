@@ -1,0 +1,30 @@
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: test-eureka
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 30000
+    response-cache-update-interval-ms: 3000
+
+# 測試環境安全配置
+spring:
+  security:
+    user:
+      name: ${EUREKA_USERNAME:test-admin}
+      password: ${EUREKA_PASSWORD:test-password}
+
+# 測試環境日誌配置
+logging:
+  level:
+    root: INFO
+    '[com.example.registry]': INFO
+    '[org.springframework.cloud.netflix.eureka]': INFO
+    '[org.springframework.boot.actuate]': INFO
